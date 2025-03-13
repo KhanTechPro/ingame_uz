@@ -1,10 +1,12 @@
 "use client";
 import { useState } from "react";
 
+type FilterKeys = "gaming" | "compact" | "games";
+
 export default function ComputerSelector() {
   const [selectedTab, setSelectedTab] = useState("По цене");
-  const [selectedPrices, setSelectedPrices] = useState<number[]>([]); // ✅ Define array type
-  const [filters, setFilters] = useState({
+  const [selectedPrices, setSelectedPrices] = useState<number[]>([]);
+  const [filters, setFilters] = useState<Record<FilterKeys, boolean>>({
     gaming: false,
     compact: false,
     games: false,
@@ -19,21 +21,19 @@ export default function ComputerSelector() {
     "5 550 000 сум",
   ];
 
-  // ✅ Fix: Add explicit types for parameters
   const togglePriceSelection = (price: string, index: number) => {
     setSelectedPrices((prevSelected) => {
       const newSelection = [...prevSelected];
-      if (newSelection.includes(index)) {
-        return newSelection.filter((i) => i !== index); // Deselect if already selected
-      } else {
-        return [...newSelection, index]; // Select if not selected
-      }
+      return newSelection.includes(index)
+        ? newSelection.filter((i) => i !== index)
+        : [...newSelection, index];
     });
   };
 
   return (
     <div className="bg-black text-white flex flex-col justify-between items-center p-6 rounded-lg w-full px-10 md:px-20">
       <h2 className="text-4xl">Подберем компьютер</h2>
+
       {/* Tabs */}
       <div className="flex justify-between items-center gap-6 text-gray-400 md:gap-12 py-4">
         {["По цене", "По видеокарте", "По процессору"].map((tab, index) => (
@@ -73,14 +73,19 @@ export default function ComputerSelector() {
         ].map(({ key, label }) => (
           <label key={key} className="flex items-center gap-2">
             <div
-              onClick={() => setFilters({ ...filters, [key]: !filters[key] })}
+              onClick={() =>
+                setFilters((prevFilters) => ({
+                  ...prevFilters,
+                  [key]: !prevFilters[key as keyof typeof prevFilters],
+                }))
+              }
               className={`w-12 h-6 rounded-full cursor-pointer relative transition-colors ${
-                filters[key] ? "bg-pink-500" : "bg-gray-600"
+                filters[key as keyof typeof filters] ? "bg-pink-500" : "bg-gray-600"
               }`}
             >
               <div
                 className={`w-5 h-5 bg-white rounded-full absolute top-0.5 transition-all ${
-                  filters[key] ? "right-1" : "left-1"
+                  filters[key as keyof typeof filters] ? "right-1" : "left-1"
                 }`}
               ></div>
             </div>
