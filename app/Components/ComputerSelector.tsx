@@ -1,16 +1,16 @@
-"use client"; 
+"use client";
 import { useState } from "react";
 
 export default function ComputerSelector() {
   const [selectedTab, setSelectedTab] = useState("По цене");
-  const [selectedPrices, setSelectedPrices] = useState([]); // Use array to track selections
+  const [selectedPrices, setSelectedPrices] = useState<number[]>([]); // ✅ Define array type
   const [filters, setFilters] = useState({
     gaming: false,
     compact: false,
     games: false,
   });
 
-  const priceOptions = [
+  const priceOptions: string[] = [
     "5 550 000 сум",
     "5 550 000 сум",
     "5 550 000 сум",
@@ -19,7 +19,8 @@ export default function ComputerSelector() {
     "5 550 000 сум",
   ];
 
-  const togglePriceSelection = (price, index) => {
+  // ✅ Fix: Add explicit types for parameters
+  const togglePriceSelection = (price: string, index: number) => {
     setSelectedPrices((prevSelected) => {
       const newSelection = [...prevSelected];
       if (newSelection.includes(index)) {
