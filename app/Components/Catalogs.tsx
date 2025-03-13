@@ -1,112 +1,74 @@
 "use client";
 
 import Image from "next/image";
-import Link from 'next/link';
-import React, { useEffect, useState } from "react";
-import { category as categoryApi } from "../Api/Api";
+import Link from "next/link";
+import React from "react";
 import { useLanguage } from "../Context/LanguageContext"; // ✅ Import language context
 
 const Catalogs = () => {
-    const { language } = useLanguage(); // ✅ Get current language
-    const [categories, setCategories] = useState([]);
+  const { language } = useLanguage(); // ✅ Get current language
 
-    const translations: Record<string, Record<string, string>> = {
-        ru: {
-            title: "КАТАЛОГ INGAME.UZ",
-            subtitle: "Выберите себе в каталоге для максимально комфортной игры",
-            tables: "Столы",
-            chairs: "Кресла",
-            armchair: "Кресло",
-            keyboard: "Клавиатура",
-            components: "Комплектующие",
-            headset: "Гарнитура",
-            mouse: "Мышки",
-            accessories: "Аксессуары",
-        },
-        uz: {
-            title: "KATALOG INGAME.UZ",
-            subtitle: "Maksimal qulay o‘yin uchun katalogdan o‘zingizga mosini tanlang",
-            tables: "Stollar",
-            chairs: "Stullar",
-            armchair: "Kreslo",
-            keyboard: "Klaviatura",
-            components: "Kompyuter qismlari",
-            headset: "Garnitura",
-            mouse: "Sichqoncha",
-            accessories: "Aksessuarlar",
-        },
-    };
+  const translations: Record<string, Record<string, string>> = {
+    ru: {
+      title: "КАТАЛОГ INGAME.UZ",
+      subtitle: "Выберите себе в каталоге для максимально комфортной игры",
+      tables: "Столы",
+      chairs: "Кресла",
+      armchair: "Кресло",
+      keyboard: "Клавиатура",
+      components: "Комплектующие",
+      headset: "Гарнитура",
+      mouse: "Мышки",
+      accessories: "Аксессуары",
+    },
+    uz: {
+      title: "KATALOG INGAME.UZ",
+      subtitle: "Maksimal qulay o‘yin uchun katalogdan o‘zingizga mosini tanlang",
+      tables: "Stollar",
+      chairs: "Stullar",
+      armchair: "Kreslo",
+      keyboard: "Klaviatura",
+      components: "Kompyuter qismlari",
+      headset: "Garnitura",
+      mouse: "Sichqoncha",
+      accessories: "Aksessuarlar",
+    },
+  };
 
-    useEffect(() => {
-        const fetchCategories = async () => {
-            try {
-                const response = await fetch(categoryApi);
-                if (!response.ok) throw new Error(`HTTP error! Status: ${response.status}`);
+  // ✅ Local category list (No API)
+  const categories = [
+    { id: 1, name: "tables", img: "/screen.png" },
+    { id: 2, name: "chairs", img: "/table.png" },
+    { id: 3, name: "armchair", img: "/chair.png" },
+    { id: 4, name: "keyboard", img: "/keyboard.png" },
+    { id: 5, name: "components", img: "/pc.png" },
+    { id: 6, name: "headset", img: "/headphones.png" },
+    { id: 7, name: "mouse", img: "/mouse.png" },
+    { id: 8, name: "accessories", img: "/microphone.png" },
+  ];
 
-                const data = await response.json();
-                console.log("Fetched categories:", data); // Debugging
+  return (
+    <div className="w-full px-5 md:px-10 flex flex-col justify-center items-center gap-8">
+      <div className="text-center">
+        <h2 className="text-[28px] md:text-[40px]">{translations[language]?.title}</h2>
+        <p className="text-sm md:text-base">{translations[language]?.subtitle}</p>
+      </div>
 
-                setCategories(data);
-            } catch (error) {
-                console.error("Error fetching categories:", error);
-            }
-        };
-
-        fetchCategories();
-    }, []);
-
-    return (
-        <div className="w-full px-10 md:px-10 flex flex-col justify-center items-center gap-12">
-            <div className="flex flex-col justify-center items-center">
-                <h2 className="text-[40px]">{translations[language]?.title}</h2>
-                <p>{translations[language]?.subtitle}</p>
-            </div>
-
-            <div className="flex justify-between items-center gap-12">
-                <Link href="/#" className="flex flex-col items-center hover:bg-pink-600 duration-300 ease-in-out rounded-md">
-                    <Image src="/screen.png" alt="logo" width={120} height={50} className='object-contain' />
-                    <h3>{translations[language]?.tables}</h3>
-                </Link>
-
-                <Link href="/#" className="flex flex-col items-center hover:bg-pink-600 duration-300 ease-in-out rounded-md">
-                    <Image src="/table.png" alt="logo" width={120} height={50} className='object-contain' />
-                    <h3>{translations[language]?.chairs}</h3>
-                </Link>
-
-                <Link href="/#" className="flex flex-col items-center hover:bg-pink-600 duration-300 ease-in-out rounded-md">
-                    <Image src="/chair.png" alt="logo" width={120} height={50} className='object-contain' />
-                    <h3>{translations[language]?.armchair}</h3>
-                </Link>
-
-                <Link href="/#" className="flex flex-col items-center hover:bg-pink-600 duration-300 ease-in-out rounded-md">
-                    <Image src="/keyboard.png" alt="logo" width={120} height={50} className='object-contain' />
-                    <h3>{translations[language]?.keyboard}</h3>
-                </Link>
-            </div>
-
-            <div className="flex justify-between items-center gap-12">
-                <Link href="/#" className="flex flex-col items-center hover:bg-pink-600 duration-300 ease-in-out rounded-md">
-                    <Image src="/pc.png" alt="logo" width={120} height={50} className='object-contain' />
-                    <h3>{translations[language]?.components}</h3>
-                </Link>
-
-                <Link href="/#" className="flex flex-col items-center hover:bg-pink-600 duration-300 ease-in-out rounded-md">
-                    <Image src="/headphones.png" alt="logo" width={100} height={50} className='object-contain' />
-                    <h3>{translations[language]?.headset}</h3>
-                </Link>
-
-                <Link href="/#" className="flex flex-col items-center hover:bg-pink-600 duration-300 ease-in-out rounded-md">
-                    <Image src="/mouse.png" alt="logo" width={120} height={50} className='object-contain' />
-                    <h3>{translations[language]?.mouse}</h3>
-                </Link>
-
-                <Link href="/#" className="flex flex-col items-center hover:bg-pink-600 duration-300 ease-in-out rounded-md">
-                    <Image src="/microphone.png" alt="logo" width={120} height={50} className='object-contain' />
-                    <h3>{translations[language]?.accessories}</h3>
-                </Link>
-            </div>
-        </div>
-    );
+      {/* ✅ Responsive Grid Layout */}
+      <div className="grid grid-cols-2 md:grid-cols-4 gap-6">
+        {categories.map((category) => (
+          <Link
+            key={category.id}
+            href="/#"
+            className="flex flex-col items-center p-3 rounded-md hover:bg-pink-600 duration-300 ease-in-out"
+          >
+            <Image src={category.img} alt={category.name} width={100} height={50} className="object-contain" />
+            <h3 className="text-sm md:text-lg">{translations[language]?.[category.name]}</h3>
+          </Link>
+        ))}
+      </div>
+    </div>
+  );
 };
 
 export default Catalogs;
