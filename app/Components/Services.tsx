@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
+import Image from "next/image"; // ✅ Import next/image
 
 interface Service {
   id: number;
@@ -23,7 +24,7 @@ const Services = () => {
       try {
         const res = await fetch(API_URL);
         if (!res.ok) throw new Error("Failed to fetch services");
-        const data = await res.json();
+        const data: Service[] = await res.json(); // ✅ Ensure correct type
         console.log("Services Data:", data);
         setServices(data);
       } catch (err) {
@@ -47,13 +48,25 @@ const Services = () => {
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 max-w-6xl mx-auto mt-6">
         {services.map((service) => (
           <div key={service.id} className="bg-gray-900 rounded-lg overflow-hidden shadow-lg">
-            {/* ✅ Corrected Image Rendering */}
-            <img
-              src={service.image_urls[0] ? `${BASE_URL}${service.image_urls[0]}` : "/fallback.jpg"}
-              alt={service.name_uz}
-              className="w-full h-40 object-cover"
-              onError={(e) => (e.currentTarget.src = "/fallback.jpg")}
-            />
+            {/* ✅ Use Next.js Image */}
+            {service.image_urls[0] ? (
+              <Image
+                src={`${BASE_URL}${service.image_urls[0]}`}
+                alt={service.name_uz}
+                width={400} // ✅ Set width & height
+                height={160}
+                className="w-full h-40 object-cover"
+                loading="lazy"
+              />
+            ) : (
+              <Image
+                src="/fallback.jpg"
+                alt="Fallback Image"
+                width={400}
+                height={160}
+                className="w-full h-40 object-cover"
+              />
+            )}
 
             {/* ✅ Service Details */}
             <div className="p-4">

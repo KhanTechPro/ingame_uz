@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
+import Image from "next/image"; // ✅ Import next/image
 import { Swiper, SwiperSlide } from "swiper/react";
 import "swiper/css";
 import "swiper/css/navigation";
@@ -26,7 +27,7 @@ const Reviews = () => {
       try {
         const res = await fetch(API_URL);
         if (!res.ok) throw new Error("Failed to fetch comments");
-        const data = await res.json();
+        const data: UserComment[] = await res.json(); // ✅ Ensure correct type
         console.log("Comments Data:", data);
         setComments(data);
       } catch (error) {
@@ -59,17 +60,22 @@ const Reviews = () => {
           {comments.map((user) => (
             <SwiperSlide key={user.id} className="p-5 bg-gray-900 rounded-lg">
               {/* User Image */}
-              <img
-                src={user.image}
-                alt={user.name}
-                className="w-full h-40 object-cover rounded-lg"
-              />
-              
+              {user.image && (
+                <Image
+                  src={user.image} // ✅ Use next/image
+                  alt={user.name}
+                  width={200} // ✅ Set width & height
+                  height={160}
+                  className="w-full h-40 object-cover rounded-lg"
+                  loading="lazy"
+                />
+              )}
+
               {/* Comment */}
               <p className="mt-3 text-pink-500 text-sm font-semibold">
                 “{user.comment}”
               </p>
-              
+
               {/* User Details */}
               <h2 className="mt-2 text-lg font-semibold">{user.name}</h2>
               <p className="text-gray-400 text-sm">

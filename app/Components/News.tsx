@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
+import Image from "next/image"; // ✅ Import next/image
 
 interface ImageType {
   id: number;
@@ -28,7 +29,7 @@ const NewsList = () => {
       try {
         const res = await fetch(apiUrl);
         if (!res.ok) throw new Error("Failed to fetch news");
-        const data = await res.json();
+        const data: NewsItem[] = await res.json(); // ✅ Ensure correct type
         console.log("News Data:", data);
         setNews(data);
       } catch (error) {
@@ -37,7 +38,7 @@ const NewsList = () => {
     };
 
     fetchNews();
-  }, []);
+  }, [apiUrl]); // ✅ Fix: Add `apiUrl` to dependency array
 
   return (
     <div className="bg-black text-white px-10 md:px-20 pt-5">
@@ -45,11 +46,16 @@ const NewsList = () => {
       <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
         {news.map((item) => (
           <div key={item.id} className="p-5 bg-zinc-900 rounded-lg">
-            <img
-              src={`${BASE_URL}${item.images[0]?.image}`} 
-              alt={item.name_uz}
-              className="w-full h-80 object-cover rounded-lg"
-            />
+            {item.images.length > 0 && (
+              <Image
+                src={`${BASE_URL}${item.images[0].image}`} // ✅ Use next/image
+                alt={item.name_uz}
+                width={300} // ✅ Set width & height
+                height={320}
+                className="w-full h-80 object-cover rounded-lg"
+                loading="lazy"
+              />
+            )}
             <h2 className="text-lg font-semibold mt-3">{item.name_uz}</h2>
             <p className="text-sm text-gray-400">{item.description_uz.slice(0, 100)}...</p>
             <p className="text-lg font-bold text-pink-500">{item.price} UZS</p>

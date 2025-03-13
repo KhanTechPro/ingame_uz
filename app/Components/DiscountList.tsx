@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import Image from "next/image";
+import Image from "next/image"; // ✅ Use next/image
 
 interface DiscountProduct {
   id: number;
@@ -36,19 +36,11 @@ const DiscountList = () => {
           throw new Error(`Failed to fetch discounts: ${res.status}`);
         }
 
-        const data: DiscountProduct[] = await res.json();
-
-        if (!Array.isArray(data)) {
-          throw new Error("Invalid API response format");
-        }
+        const data: DiscountProduct[] = await res.json(); // ✅ Typed API response
 
         setProducts(data);
-      } catch (err: unknown) {
-        if (err instanceof Error) {
-          setError(err.message);
-        } else {
-          setError("An unknown error occurred");
-        }
+      } catch (err) {
+        setError((err as Error).message); // ✅ Type-safe error handling
       } finally {
         setLoading(false);
       }
@@ -70,33 +62,25 @@ const DiscountList = () => {
           {products.length > 0 ? (
             products.map((item) => (
               <div key={item.id} className="p-5 bg-gray-900 rounded-lg relative">
-                {/* Discount Badge */}
                 {item.discount_percent > 0 && (
                   <span className="absolute top-2 left-2 bg-pink-600 text-white text-xs px-2 py-1 rounded">
                     -{item.discount_percent}%
                   </span>
                 )}
 
-                {/* Product Image with `next/image` */}
-                <div className="relative w-full h-40">
-                  <Image
-                    src={`${BASE_URL}${item.image}`}
-                    alt={item.name}
-                    layout="fill"
-                    objectFit="cover"
-                    className="rounded-lg"
-                    priority={false}
-                  />
-                </div>
+                <Image
+                  src={`${BASE_URL}${item.image}`}
+                  alt={item.name}
+                  width={200} // ✅ Add width & height
+                  height={150}
+                  className="w-full h-40 object-cover rounded-lg"
+                  loading="lazy"
+                />
 
-                {/* Product Name */}
                 <h2 className="text-lg font-semibold mt-3">{item.name}</h2>
-
-                {/* Old & New Price */}
                 <p className="text-gray-500 line-through">{item.old_price} сум</p>
                 <p className="text-lg font-bold text-pink-500">{item.price} сум</p>
 
-                {/* Buy Button */}
                 <button className="bg-pink-600 text-white py-2 px-4 mt-3 rounded w-full">
                   Купить
                 </button>
