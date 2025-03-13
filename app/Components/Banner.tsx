@@ -10,15 +10,25 @@ import { Pagination, Autoplay } from "swiper/modules";
 import { banners as bannersApi } from "../Api/Api";
 import { useLanguage } from "../Context/LanguageContext";
 
+// ✅ Define a type for banners
+interface BannerType {
+  id: number;
+  name_uz: string;
+  name_ru?: string;
+  description_uz: string;
+  description_ru?: string;
+  image_urls: string[];
+}
+
 const orbitron = Orbitron({
   subsets: ["latin"],
   weight: ["400", "500", "700", "900"],
 });
 
 const Banner = () => {
-  const [banners, setBanners] = useState([]);
+  const [banners, setBanners] = useState<BannerType[]>([]);
   const { language } = useLanguage();
-  const fallbackImage = "/banner_default_image.jpg"; 
+  const fallbackImage = "/banner_default_image.jpg";
 
   useEffect(() => {
     const fetchBanners = async () => {
@@ -26,8 +36,8 @@ const Banner = () => {
         const response = await fetch(bannersApi);
         if (!response.ok) throw new Error(`HTTP error! Status: ${response.status}`);
 
-        const data = await response.json();
-        const filteredBanners = data.filter((banner: { image_urls: string | any[] }) => banner.image_urls?.length > 0);
+        const data: BannerType[] = await response.json(); // ✅ Explicitly define type
+        const filteredBanners = data.filter((banner) => banner.image_urls.length > 0);
         setBanners(filteredBanners);
       } catch (error) {
         console.error("Error fetching banners:", error);
@@ -38,7 +48,7 @@ const Banner = () => {
   }, []);
 
   return (
-    <div className="w-full relative px-5 md:px-10 ">
+    <div className="w-full relative px-5 md:px-10">
       <Swiper
         modules={[Pagination, Autoplay]}
         spaceBetween={20}
@@ -55,11 +65,11 @@ const Banner = () => {
               {/* ✅ First Image (Common Image at Bottom) */}
               <div className="absolute top-0 right-0 w-1/2 h-full flex items-center justify-center">
                 <Image
-                  src="/bg.png" // Common image
+                  src="/bg.png"
                   alt="Background"
                   width={700}
                   height={700}
-                  className="object-cover" // Slightly transparent
+                  className="object-cover"
                   priority
                 />
               </div>
@@ -83,7 +93,7 @@ const Banner = () => {
               {/* ✅ Second Image (Above Common Image) */}
               <div className="absolute top-0 right-0 w-1/2 h-full flex items-center justify-center z-20">
                 <Image
-                  src={banner.image_urls?.length > 0 
+                  src={banner.image_urls.length > 0 
                     ? new URL(banner.image_urls[0], "https://ingame.pythonanywhere.com").href
                     : fallbackImage
                   }
@@ -97,8 +107,6 @@ const Banner = () => {
 
             </div>
           </SwiperSlide>
-
-
         ))}
       </Swiper>
     </div>
