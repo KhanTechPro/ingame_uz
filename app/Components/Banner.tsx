@@ -98,8 +98,8 @@ const Banner = () => {
                     : fallbackImage
                   }
                   alt={banner.name_uz}
-                  width={500}
-                  height={500}
+                  width={400}
+                  height={400}
                   className="object-contain"
                   priority
                 />
