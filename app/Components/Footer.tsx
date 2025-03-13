@@ -1,18 +1,11 @@
 "use client"; 
 import React from "react";
-import { GoogleMap, LoadScript, Marker } from "@react-google-maps/api";
 import { FaInstagram, FaTelegram } from "react-icons/fa";
 import { FiSmartphone } from "react-icons/fi";
 import { GoClock } from "react-icons/go";
 import { IoLocationOutline } from "react-icons/io5";
 
 const Footer = () => {
-    const mapStyles = { height: "200px", width: "100%" };
-    const defaultCenter = {
-        lat: 41.2995, // Toshkentni kengligi
-        lng: 69.2401, // Toshkentni uzunligi
-    };
-
     return (
         <footer className="bg-[#131212] text-white py-10">
             <div className="container mx-auto flex flex-col md:flex-row justify-center items-center">
@@ -67,11 +60,14 @@ const Footer = () => {
                 </div>
                 <div className="w-full md:w-1/3">
                     <div className="w-full h-40 md:h-48">
-                        {/* <LoadScript className="w-full h-full rounded-lg" googleMapsApiKey={import.meta.env.VITE_GOOGLE_MAPS_API_KEY}> */}
-                            {/* <GoogleMap mapContainerStyle={mapStyles} zoom={13} center={defaultCenter}>
-                                <Marker position={defaultCenter} />
-                            </GoogleMap> */}
-                        {/* </LoadScript> */}
+                        {/* Google Map section (Commented out for now) */}
+                        {/* 
+                        <LoadScript googleMapsApiKey={import.meta.env.VITE_GOOGLE_MAPS_API_KEY}>
+                            <GoogleMap mapContainerStyle={{ height: "200px", width: "100%" }} zoom={13} center={{ lat: 41.2995, lng: 69.2401 }}>
+                                <Marker position={{ lat: 41.2995, lng: 69.2401 }} />
+                            </GoogleMap>
+                        </LoadScript> 
+                        */}
                     </div>
                 </div>
             </div>
