@@ -11,11 +11,11 @@ export const metadata: Metadata = {
   description: "This is my portfolio",
 };
 
-export default function RootLayout({ children }: { children: React.ReactNode }) {
+export default function RootLayout() {
   return (
     <html lang="en">
       <body className={inter.className}>
-        <LanguageProvider> 
+        <LanguageProvider>
           <Main />
         </LanguageProvider>
       </body>
