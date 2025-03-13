@@ -2,11 +2,16 @@
 
 import Image from "next/image";
 import Link from "next/link";
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { useLanguage } from "../Context/LanguageContext"; // ✅ Import language context
 
 const Catalogs = () => {
   const { language } = useLanguage(); // ✅ Get current language
+  const [isClient, setIsClient] = useState(false);
+
+  useEffect(() => {
+    setIsClient(true); // ✅ Ensures this runs only on the client
+  }, []);
 
   const translations: Record<string, Record<string, string>> = {
     ru: {
@@ -46,6 +51,9 @@ const Catalogs = () => {
     { id: 7, name: "mouse", img: "/mouse.png" },
     { id: 8, name: "accessories", img: "/microphone.png" },
   ];
+
+  // ✅ Prevents Hydration Mismatch
+  if (!isClient) return null;
 
   return (
     <div className="w-full px-5 md:px-10 flex flex-col justify-center items-center gap-8">
