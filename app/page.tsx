@@ -1,5 +1,4 @@
 import Navbar from "./Components/Navbar";
-import Main from "./Main";
 
 export default function Home() {
   return (

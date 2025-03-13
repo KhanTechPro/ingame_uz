@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
+import Image from "next/image";
 
 interface DiscountProduct {
   id: number;
@@ -35,15 +36,19 @@ const DiscountList = () => {
           throw new Error(`Failed to fetch discounts: ${res.status}`);
         }
 
-        const data = await res.json();
+        const data: DiscountProduct[] = await res.json();
 
         if (!Array.isArray(data)) {
           throw new Error("Invalid API response format");
         }
 
         setProducts(data);
-      } catch (err: any) {
-        setError(err.message);
+      } catch (err: unknown) {
+        if (err instanceof Error) {
+          setError(err.message);
+        } else {
+          setError("An unknown error occurred");
+        }
       } finally {
         setLoading(false);
       }
@@ -72,13 +77,17 @@ const DiscountList = () => {
                   </span>
                 )}
 
-                {/* Product Image */}
-                <img
-                  src={`${BASE_URL}${item.image}`}
-                  alt={item.name}
-                  className="w-full h-40 object-cover rounded-lg"
-                  loading="lazy"
-                />
+                {/* Product Image with `next/image` */}
+                <div className="relative w-full h-40">
+                  <Image
+                    src={`${BASE_URL}${item.image}`}
+                    alt={item.name}
+                    layout="fill"
+                    objectFit="cover"
+                    className="rounded-lg"
+                    priority={false}
+                  />
+                </div>
 
                 {/* Product Name */}
                 <h2 className="text-lg font-semibold mt-3">{item.name}</h2>
