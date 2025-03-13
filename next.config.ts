@@ -1,7 +1,7 @@
-import type { NextConfig } from "next";
-
-const nextConfig: NextConfig = {
-  /* config options here */
+const nextConfig = {
+  images: {
+    domains: ["ingame.pythonanywhere.com"],
+  },
 };
 
-export default nextConfig;
+module.exports = nextConfig;
